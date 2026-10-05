@@ -1,6 +1,6 @@
 [package]
 name = "chardet-py"
-description = "Python bindings for the Rust chardet port"
+description = "Python bindings for chardet-rs"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -13,5 +13,5 @@ name = "chardet"
 crate-type = ["cdylib"]
 
 [dependencies]
-chardet_core = { package = "chardet", path = "../chardet" }
+chardet_core = { package = "chardet-rs", path = "../chardet" }
 pyo3 = { version = "0.23", features = ["extension-module"] }

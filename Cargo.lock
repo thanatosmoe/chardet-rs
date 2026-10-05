@@ -39,7 +39,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
-name = "chardet"
+name = "chardet-py"
+version = "0.1.0"
+dependencies = [
+ "chardet-rs",
+ "pyo3",
+]
+
+[[package]]
+name = "chardet-rs"
 version = "0.1.0"
 dependencies = [
  "encoding_rs",
@@ -47,14 +55,6 @@ dependencies = [
  "once_cell",
  "regex",
  "sha2",
-]
-
-[[package]]
-name = "chardet-py"
-version = "0.1.0"
-dependencies = [
- "chardet",
- "pyo3",
 ]
 
 [[package]]

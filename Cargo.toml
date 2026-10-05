@@ -7,7 +7,11 @@ version = "0.1.0"
 edition = "2021"
 license = "0BSD"
 repository = "https://github.com/thanatosmoe/chardet-rs"
+homepage = "https://github.com/thanatosmoe/chardet-rs"
+documentation = "https://docs.rs/chardet-rs"
 authors = ["Thanatos"]
+keywords = ["encoding", "charset", "detection", "unicode", "chardet"]
+categories = ["text-processing", "encoding", "internationalization"]
 rust-version = "1.74"
 
 [profile.release]

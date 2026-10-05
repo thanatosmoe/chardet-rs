@@ -53,7 +53,15 @@ scripts_compare/    parity harnesses against Python chardet 7
 ### Rust
 
 ```console
-$ cargo add chardet
+$ cargo add chardet-rs
+```
+
+The crate is published as `chardet-rs`; its library target is named `chardet`,
+so you still `use chardet::...`:
+
+```rust
+// Cargo.toml: chardet-rs = "0.1"
+use chardet::{detect, DetectOptions};
 ```
 
 Or from a checkout:
@@ -65,12 +73,25 @@ $ ./target/release/chardetect --version
 
 ### Python
 
+From PyPI (distribution `chardet-rs`, import module `chardet`):
+
+```console
+$ pip install chardet-rs
+```
+
+Or build from a checkout:
+
 ```console
 $ python3 -m venv .venv && . .venv/bin/activate
 $ pip install maturin
 $ cd chardet-py && maturin build --release
-$ pip install ../target/wheels/chardet-*.whl
+$ pip install ../target/wheels/chardet_rs-*.whl
 ```
+
+> **Note:** the Python distribution is named `chardet-rs` because the name
+> `chardet` on PyPI belongs to the reference project. Installing it provides
+> the `chardet` import module and therefore conflicts with the reference
+> `chardet` package — install one or the other in a given environment.
 
 ## Quick Start
 
