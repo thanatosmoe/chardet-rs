@@ -38,7 +38,9 @@ pub fn fill_languages(data: &[u8], results: Vec<DetectionResult>) -> Vec<Detecti
         let mut lang: Option<String> = if recheck {
             None
         } else {
-            model_data().infer_language(&encoding).map(|s| s.to_string())
+            model_data()
+                .infer_language(&encoding)
+                .map(|s| s.to_string())
         };
         if lang.is_none() && !data.is_empty() && has_model_variants(&encoding) {
             if profile.is_none() {
@@ -58,12 +60,8 @@ pub fn fill_languages(data: &[u8], results: Vec<DetectionResult>) -> Vec<Detecti
                     utf8_profile = Some(BigramProfile::new(&utf8_data));
                     utf8_src = Some(utf8_data.clone());
                 }
-                let (_, utf8_lang) = score_best_language(
-                    &utf8_data,
-                    "utf-8",
-                    utf8_profile.as_ref(),
-                    thin,
-                );
+                let (_, utf8_lang) =
+                    score_best_language(&utf8_data, "utf-8", utf8_profile.as_ref(), thin);
                 let utf8_ok = utf8_lang
                     .as_deref()
                     .map(|l| !RARE_LANGUAGES.contains(&l))
@@ -77,9 +75,7 @@ pub fn fill_languages(data: &[u8], results: Vec<DetectionResult>) -> Vec<Detecti
             .as_deref()
             .map(|l| RARE_LANGUAGES.contains(&l))
             .unwrap_or(false);
-        if recheck && (lang.is_none() || rare_lang) {
-            filled.push(result);
-        } else if lang.is_none() {
+        if lang.is_none() || (recheck && rare_lang) {
             filled.push(result);
         } else {
             filled.push(DetectionResult::with_mime(

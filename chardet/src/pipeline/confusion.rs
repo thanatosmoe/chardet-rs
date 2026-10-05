@@ -197,10 +197,20 @@ fn vote_with_margin(
         }
     }
     if votes_a > votes_b {
-        return (Some(enc_a.to_string()), votes_a - votes_b, demotion_a, events_a);
+        return (
+            Some(enc_a.to_string()),
+            votes_a - votes_b,
+            demotion_a,
+            events_a,
+        );
     }
     if votes_b > votes_a {
-        return (Some(enc_b.to_string()), votes_b - votes_a, demotion_b, events_b);
+        return (
+            Some(enc_b.to_string()),
+            votes_b - votes_a,
+            demotion_b,
+            events_b,
+        );
     }
     (None, 0, 0, 0)
 }
@@ -513,8 +523,7 @@ pub fn resolve_confusion_groups(
                 .into_iter()
                 .flatten()
                 .collect();
-            let bigram_winner =
-                resolve_by_bigram_rescore(data, &enc_a, &enc_b, diff, &langs);
+            let bigram_winner = resolve_by_bigram_rescore(data, &enc_a, &enc_b, diff, &langs);
             if in_band && diff.len() < CROSS_FAMILY_MIN_DIFFS {
                 bigram_winner.or_else(|| cat_winner.clone())
             } else if bigram_winner.is_some() && bigram_winner == cat_winner {

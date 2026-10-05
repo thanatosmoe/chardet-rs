@@ -6,8 +6,8 @@ pub mod enums;
 pub mod models;
 pub mod output_names;
 pub mod pipeline;
-mod registry_data;
 pub mod registry;
+mod registry_data;
 pub mod result;
 pub mod utils;
 
@@ -83,7 +83,11 @@ fn build_run_options(opts: &DetectOptions) -> Result<PipelineOptions, String> {
     })
 }
 
-fn apply_output_names(mut result: DetectionResult, data: &[u8], opts: &DetectOptions) -> DetectionResult {
+fn apply_output_names(
+    mut result: DetectionResult,
+    data: &[u8],
+    opts: &DetectOptions,
+) -> DetectionResult {
     let window = &data[..data.len().min(opts.max_bytes)];
     if opts.prefer_superset {
         output_names::apply_preferred_superset(&mut result, Some(window));

@@ -325,7 +325,8 @@ pub fn score_best_language(
 
     if demote_thin_rare {
         if let (Some(bl), Some(bp)) = (&best_lang, &best_prevalent_lang) {
-            if RARE_LANGUAGES.contains(&bl.as_str()) && best_score - best_prevalent < THIN_RARE_MARGIN
+            if RARE_LANGUAGES.contains(&bl.as_str())
+                && best_score - best_prevalent < THIN_RARE_MARGIN
             {
                 best_lang = Some(bp.clone());
             }

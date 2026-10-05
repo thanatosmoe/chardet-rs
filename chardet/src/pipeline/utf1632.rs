@@ -139,10 +139,7 @@ fn check_utf32(data: &[u8]) -> Option<DetectionResult> {
     }
 
     let le_last_null = (3..data.len()).step_by(4).filter(|&i| data[i] == 0).count();
-    let le_third_null = (2..data.len())
-        .step_by(4)
-        .filter(|&i| data[i] == 0)
-        .count();
+    let le_third_null = (2..data.len()).step_by(4).filter(|&i| data[i] == 0).count();
     if le_last_null == num_units && le_third_null as f64 / num_units as f64 > 0.5 {
         if let Some(text) = decode_utf32(data, true) {
             if looks_like_text(&text) {
@@ -168,10 +165,10 @@ fn check_utf16(data: &[u8]) -> Option<DetectionResult> {
     let be_frac = be_null_count as f64 / num_units as f64;
     let le_frac = le_null_count as f64 / num_units as f64;
 
-    let le_qualified =
-        le_frac >= UTF16_MIN_NULL_FRACTION && !is_null_separator_pattern(&data[..sample_len], le_frac);
-    let be_qualified =
-        be_frac >= UTF16_MIN_NULL_FRACTION && !is_null_separator_pattern(&data[..sample_len], be_frac);
+    let le_qualified = le_frac >= UTF16_MIN_NULL_FRACTION
+        && !is_null_separator_pattern(&data[..sample_len], le_frac);
+    let be_qualified = be_frac >= UTF16_MIN_NULL_FRACTION
+        && !is_null_separator_pattern(&data[..sample_len], be_frac);
 
     if !(le_qualified || be_qualified) {
         return None;

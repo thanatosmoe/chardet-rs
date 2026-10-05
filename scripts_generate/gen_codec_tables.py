@@ -63,6 +63,7 @@ def main() -> None:
     out.append("")
     # case tables for every encoding
     out.append("/// 256-entry letter-case table per encoding: 0=non-letter, 1=Lu, 2=other L/M.")
+    out.append("#[rustfmt::skip]")
     out.append("pub fn letter_case(name: &str) -> Option<&'static [u8; 256]> {")
     out.append("    match name {")
     for name in names:
@@ -76,6 +77,7 @@ def main() -> None:
     out.append("")
     # single-byte decode tables for SBCS encodings
     out.append("/// 256-entry Unicode decode table per single-byte encoding.")
+    out.append("#[rustfmt::skip]")
     out.append("pub fn sbcs_decode(name: &str) -> Option<&'static [u32; 256]> {")
     out.append("    match name {")
     for name in names:

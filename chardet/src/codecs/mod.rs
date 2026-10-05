@@ -634,7 +634,7 @@ fn scan_iso2022(data: &[u8], kind: Iso2022Kind) -> Status {
                     if j >= n {
                         return Status::pending(n - i);
                     }
-                    db = c == b'$' || (c == b'(' );
+                    db = c == b'$' || (c == b'(');
                     i = j + 1;
                 }
                 _ => {

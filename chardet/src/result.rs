@@ -12,11 +12,7 @@ pub struct DetectionResult {
 }
 
 impl DetectionResult {
-    pub fn new(
-        encoding: Option<String>,
-        confidence: f64,
-        language: Option<String>,
-    ) -> Self {
+    pub fn new(encoding: Option<String>, confidence: f64, language: Option<String>) -> Self {
         DetectionResult {
             encoding,
             confidence,

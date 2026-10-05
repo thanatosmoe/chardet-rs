@@ -80,9 +80,7 @@ fn parse_args() -> Result<Args, String> {
                 args.no_match = it.next().ok_or("--no-match-encoding requires a value")?;
             }
             "--empty-input-encoding" => {
-                args.empty_input = it
-                    .next()
-                    .ok_or("--empty-input-encoding requires a value")?;
+                args.empty_input = it.next().ok_or("--empty-input-encoding requires a value")?;
             }
             other if other.starts_with('-') && other != "-" => {
                 return Err(format!("unknown option {other}"));

@@ -620,6 +620,7 @@ pub static REGISTRY_ENTRIES: &[EncodingInfo] = &[
 ];
 
 /// Normalized CPython alias -> canonical registry name.
+#[rustfmt::skip]
 pub static PY_ALIASES: &[(&str, &str)] = &[
     ("037", "cp1140"),
     ("1026", "cp1026"),
@@ -830,4 +831,3 @@ pub static PY_ALIASES: &[(&str, &str)] = &[
     ("x_mac_simp_chinese", "gb18030"),
     ("x_mac_trad_chinese", "big5hkscs"),
 ];
-

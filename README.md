@@ -237,6 +237,11 @@ $ CHARDET_SRC=/path/to/chardet/src python3 scripts_compare/bench.py tests/data
 The `Benchmark` workflow (manual dispatch) runs both against the full corpus
 and writes the results to the GitHub step summary.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing, the
+parity harnesses, and the lint/format requirements enforced by CI.
+
 ## Project History
 
 chardet was created by [Mark Pilgrim](https://en.wikipedia.org/wiki/Mark_Pilgrim)

@@ -15,9 +15,7 @@ fn extract_bytes(obj: &Bound<'_, PyAny>) -> PyResult<Vec<u8>> {
     if let Ok(b) = obj.downcast::<PyByteArray>() {
         return Ok(b.to_vec());
     }
-    Err(PyValueError::new_err(
-        "byte_str must be bytes or bytearray",
-    ))
+    Err(PyValueError::new_err("byte_str must be bytes or bytearray"))
 }
 
 /// Emit a Python warning without failing if the warnings module misbehaves.
@@ -34,7 +32,10 @@ fn emit_warning(py: Python<'_>, message: &str, category: &str) {
     let _ = warnings.call_method1("warn", (message, cat, 4usize));
 }
 
-fn result_to_dict<'py>(py: Python<'py>, r: &chardet_core::DetectionResult) -> PyResult<Bound<'py, PyDict>> {
+fn result_to_dict<'py>(
+    py: Python<'py>,
+    r: &chardet_core::DetectionResult,
+) -> PyResult<Bound<'py, PyDict>> {
     let d = PyDict::new(py);
     match &r.encoding {
         Some(e) => d.set_item("encoding", e)?,
@@ -112,7 +113,9 @@ fn detect<'py>(
     empty_input_encoding: &str,
 ) -> PyResult<Bound<'py, PyDict>> {
     if max_bytes < 1 {
-        return Err(PyValueError::new_err("max_bytes must be a positive integer"));
+        return Err(PyValueError::new_err(
+            "max_bytes must be a positive integer",
+        ));
     }
     if chunk_size != 65536 {
         emit_warning(
@@ -178,7 +181,9 @@ fn detect_all<'py>(
     empty_input_encoding: &str,
 ) -> PyResult<Bound<'py, PyList>> {
     if max_bytes < 1 {
-        return Err(PyValueError::new_err("max_bytes must be a positive integer"));
+        return Err(PyValueError::new_err(
+            "max_bytes must be a positive integer",
+        ));
     }
     if chunk_size != 65536 {
         emit_warning(
@@ -257,7 +262,9 @@ impl UniversalDetector {
         empty_input_encoding: &str,
     ) -> PyResult<Self> {
         if max_bytes < 1 {
-            return Err(PyValueError::new_err("max_bytes must be a positive integer"));
+            return Err(PyValueError::new_err(
+                "max_bytes must be a positive integer",
+            ));
         }
         if lang_filter != 31 {
             emit_warning(

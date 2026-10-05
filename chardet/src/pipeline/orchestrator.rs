@@ -59,10 +59,7 @@ impl Default for PipelineOptions {
     }
 }
 
-fn make_fallback_or_none(
-    encoding: &str,
-    allowed: &[&str],
-) -> Vec<DetectionResult> {
+fn make_fallback_or_none(encoding: &str, allowed: &[&str]) -> Vec<DetectionResult> {
     if !allowed.contains(&encoding) {
         return vec![none_result()];
     }
@@ -113,8 +110,7 @@ fn gate_cjk_candidates<'a>(
             if non_ascii < CJK_MIN_NON_ASCII {
                 continue;
             }
-            let byte_coverage =
-                compute_multibyte_byte_coverage(data, enc, ctx, Some(non_ascii));
+            let byte_coverage = compute_multibyte_byte_coverage(data, enc, ctx, Some(non_ascii));
             ctx.mb_coverage.insert(enc.name.to_string(), byte_coverage);
             if byte_coverage < CJK_MIN_BYTE_COVERAGE {
                 continue;
@@ -242,10 +238,7 @@ fn run_pipeline_core(data: &[u8], opts: &PipelineOptions) -> Vec<DetectionResult
     let (utf8_valid, utf8_precheck) = scan_utf8(data);
     let ascii_precheck = detect_ascii(data);
 
-    if utf8_precheck.is_none()
-        && ascii_precheck.is_none()
-        && is_binary(data, opts.max_bytes)
-    {
+    if utf8_precheck.is_none() && ascii_precheck.is_none() && is_binary(data, opts.max_bytes) {
         return vec![DetectionResult::with_mime(
             None,
             DETERMINISTIC_CONFIDENCE,
@@ -269,8 +262,7 @@ fn run_pipeline_core(data: &[u8], opts: &PipelineOptions) -> Vec<DetectionResult
                         }
                     }
                 }
-                let promoted =
-                    promote_markup_superset(data, markup_result, &allowed);
+                let promoted = promote_markup_superset(data, markup_result, &allowed);
                 return vec![promoted];
             }
         }

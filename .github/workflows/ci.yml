@@ -14,6 +14,20 @@ env:
   CHARDET_REF: e9603fad69cdc5d34d03616682650acd4891eb5d
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
   rust:
     name: Rust build & tests
     runs-on: ubuntu-latest

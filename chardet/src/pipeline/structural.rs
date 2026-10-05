@@ -1,7 +1,7 @@
 //! Stage 2b: Multi-byte structural probing, mirroring `chardet.pipeline.structural`.
 
-use crate::result::PipelineContext;
 use crate::registry::EncodingInfo;
+use crate::result::PipelineContext;
 
 type Analysis = (f64, usize, usize);
 
@@ -220,7 +220,9 @@ fn analyze_gb18030(data: &[u8]) -> Analysis {
                 i += 4;
                 continue;
             }
-            if (0xA1..=0xF7).contains(&b) && i + 1 < data.len() && (0xA1..=0xFE).contains(&data[i + 1])
+            if (0xA1..=0xF7).contains(&b)
+                && i + 1 < data.len()
+                && (0xA1..=0xFE).contains(&data[i + 1])
             {
                 valid_count += 1;
                 leads[b as usize] = true;
@@ -377,11 +379,7 @@ fn get_analysis(data: &[u8], name: &'static str, ctx: &mut PipelineContext) -> O
 }
 
 /// 0.0-1.0 fit of `data` to the encoding's multi-byte structure.
-pub fn compute_structural_score(
-    data: &[u8],
-    enc: &EncodingInfo,
-    ctx: &mut PipelineContext,
-) -> f64 {
+pub fn compute_structural_score(data: &[u8], enc: &EncodingInfo, ctx: &mut PipelineContext) -> f64 {
     if data.is_empty() || !enc.is_multibyte {
         return 0.0;
     }

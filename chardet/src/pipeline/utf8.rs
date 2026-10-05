@@ -88,8 +88,8 @@ pub fn scan_utf8(data: &[u8]) -> (bool, Option<DetectionResult>) {
         None => n - pending_len,
         Some((lead, _end)) => {
             let mut tail_lead: isize = -1;
-            for k in n.saturating_sub(3)..n {
-                let sl = expected_seq_len(data[k]);
+            for (k, &byte) in data.iter().enumerate().skip(n.saturating_sub(3)) {
+                let sl = expected_seq_len(byte);
                 if sl > 0 && k + sl > n {
                     tail_lead = k as isize;
                     break;
@@ -111,9 +111,8 @@ pub fn scan_utf8(data: &[u8]) -> (bool, Option<DetectionResult>) {
     }
     let mb_ratio = mb as f64 / n as f64;
     let confidence_range = MAX_CONFIDENCE - BASE_CONFIDENCE;
-    let confidence = MAX_CONFIDENCE.min(
-        BASE_CONFIDENCE + confidence_range * (mb_ratio * MB_RATIO_SCALE).min(1.0),
-    );
+    let confidence = MAX_CONFIDENCE
+        .min(BASE_CONFIDENCE + confidence_range * (mb_ratio * MB_RATIO_SCALE).min(1.0));
     (true, Some(DetectionResult::enc("utf-8", confidence)))
 }
 

@@ -18,16 +18,20 @@ static XML_ENCODING_RE: Lazy<Regex> = Lazy::new(|| {
         .unwrap()
 });
 static HTML5_CHARSET_RE: Lazy<Regex> = Lazy::new(|| {
-    RegexBuilder::new(r#"<meta[^>]+charset[ \t\r\n\f\v]*=[ \t\r\n\f\v]*['"]?[ \t\r\n\f\v]*([^ \t\r\n\f\v'">;]+)"#)
-        .case_insensitive(true)
-        .build()
-        .unwrap()
+    RegexBuilder::new(
+        r#"<meta[^>]+charset[ \t\r\n\f\v]*=[ \t\r\n\f\v]*['"]?[ \t\r\n\f\v]*([^ \t\r\n\f\v'">;]+)"#,
+    )
+    .case_insensitive(true)
+    .build()
+    .unwrap()
 });
 static HTML4_CONTENT_TYPE_RE: Lazy<Regex> = Lazy::new(|| {
-    RegexBuilder::new(r#"<meta[^>]+content[ \t\r\n\f\v]*=[ \t\r\n\f\v]*['"][^'"]*charset=([^ \t\r\n\f\v'">;]+)"#)
-        .case_insensitive(true)
-        .build()
-        .unwrap()
+    RegexBuilder::new(
+        r#"<meta[^>]+content[ \t\r\n\f\v]*=[ \t\r\n\f\v]*['"][^'"]*charset=([^ \t\r\n\f\v'">;]+)"#,
+    )
+    .case_insensitive(true)
+    .build()
+    .unwrap()
 });
 static PEP263_RE: Lazy<Regex> = Lazy::new(|| {
     RegexBuilder::new(r"^[ \t\x0c]*#.*?coding[:=][ \t]*([-A-Za-z0-9_.]+)")

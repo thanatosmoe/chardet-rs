@@ -48,8 +48,11 @@ static DEMOTION_CANDIDATES: Lazy<HashMap<&'static str, HashSet<u8>>> = Lazy::new
     m
 });
 
-static KOI8_T_DISTINGUISHING: Lazy<HashSet<u8>> =
-    Lazy::new(|| set(&[0x80, 0x81, 0x83, 0x8A, 0x8C, 0x8D, 0x8E, 0x90, 0xA1, 0xA2, 0xA5, 0xB5]));
+static KOI8_T_DISTINGUISHING: Lazy<HashSet<u8>> = Lazy::new(|| {
+    set(&[
+        0x80, 0x81, 0x83, 0x8A, 0x8C, 0x8D, 0x8E, 0x90, 0xA1, 0xA2, 0xA5, 0xB5,
+    ])
+});
 
 const DEAD_HEAT_EPSILON: f64 = 1e-4;
 const CR_MAC_BAND: f64 = CONFUSION_BAND;
@@ -83,14 +86,8 @@ fn should_demote(data: &[u8], top: &DetectionResult, target: &DetectionResult) -
     if top.confidence - target.confidence > CONFUSION_BAND {
         return false;
     }
-    let lang_a = top
-        .language
-        .as_ref()
-        .map(|l| HashSet::from([l.clone()]));
-    let lang_b = target
-        .language
-        .as_ref()
-        .map(|l| HashSet::from([l.clone()]));
+    let lang_a = top.language.as_ref().map(|l| HashSet::from([l.clone()]));
+    let lang_b = target.language.as_ref().map(|l| HashSet::from([l.clone()]));
     let winner = arbitrate_distinguishing_bytes(
         data,
         &encoding,
@@ -167,9 +164,7 @@ fn demote_niche_latin(data: &[u8], results: Vec<DetectionResult>) -> Vec<Detecti
     let others: Vec<DetectionResult> = results
         .iter()
         .enumerate()
-        .filter(|(i, x)| {
-            x.encoding.as_deref() != Some(top_enc.as_str()) && *i != target_idx
-        })
+        .filter(|(i, x)| x.encoding.as_deref() != Some(top_enc.as_str()) && *i != target_idx)
         .map(|(_, x)| x.clone())
         .collect();
     let tail_conf = others.last().map(|x| x.confidence).unwrap_or(top_conf);
@@ -292,7 +287,8 @@ fn prefer_prevalent_on_dead_heat(
         .into_iter()
         .flatten()
         .collect();
-    let comparable = crate::pipeline::confusion::comparable_languages_public(&top_enc, &rival, &langs);
+    let comparable =
+        crate::pipeline::confusion::comparable_languages_public(&top_enc, &rival, &langs);
     let diff = differing_high_bytes(&top_enc, &rival);
     let winner = arbitrate_distinguishing_bytes(
         data,
@@ -389,8 +385,10 @@ fn promote_mac_on_cr_line_endings(
         }
         if let Some(enc) = r.encoding.as_deref() {
             if era_rank(enc) == LEGACY_MAC_ERA as u32 {
-                let langs: HashSet<String> =
-                    [top.language.clone(), r.language.clone()].into_iter().flatten().collect();
+                let langs: HashSet<String> = [top.language.clone(), r.language.clone()]
+                    .into_iter()
+                    .flatten()
+                    .collect();
                 if confusion_pair_winner(data, top.encoding.as_deref().unwrap(), enc, &langs)
                     .as_deref()
                     == Some(top.encoding.as_deref().unwrap())
@@ -420,8 +418,7 @@ fn prefer_decodable_on_tie(
     results: Vec<DetectionResult>,
     input_truncated: bool,
 ) -> Vec<DetectionResult> {
-    if input_truncated || results.is_empty() || results[0].encoding.is_none() || results.len() < 2
-    {
+    if input_truncated || results.is_empty() || results[0].encoding.is_none() || results.len() < 2 {
         return results;
     }
     let tail = &data[data.len().saturating_sub(4)..];

@@ -81,11 +81,11 @@ def main() -> None:
         if key not in canon and key not in extra:
             extra[key] = c
     o.append("/// Normalized CPython alias -> canonical registry name.")
+    o.append("#[rustfmt::skip]")
     o.append("pub static PY_ALIASES: &[(&str, &str)] = &[")
     for k in sorted(extra):
         o.append(f'    ("{k}", "{extra[k]}"),')
     o.append("];")
-    o.append("")
     print("\n".join(o))
 
 

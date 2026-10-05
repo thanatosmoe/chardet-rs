@@ -84,12 +84,14 @@ const ZIP_FILENAME_PREFIXES: &[(&[u8], &str)] = &[
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     ),
     (b"META-INF/MANIFEST.MF", "application/java-archive"),
-    (b"AndroidManifest.xml", "application/vnd.android.package-archive"),
+    (
+        b"AndroidManifest.xml",
+        "application/vnd.android.package-archive",
+    ),
     (b"META-INF/container.xml", "application/epub+zip"),
 ];
 
-const ZIP_FILENAME_SUFFIXES: &[(&[u8], &str)] =
-    &[(b".dist-info/", "application/x-wheel+zip")];
+const ZIP_FILENAME_SUFFIXES: &[(&[u8], &str)] = &[(b".dist-info/", "application/x-wheel+zip")];
 
 const OPENDOCUMENT_MIMES: &[&[u8]] = &[
     b"application/vnd.oasis.opendocument.text",
@@ -248,7 +250,7 @@ pub fn detect_magic(data: &[u8]) -> Option<DetectionResult> {
 
     if data.len() >= TAR_OFFSET + 6 {
         let sig = &data[TAR_OFFSET..TAR_OFFSET + 6];
-        if TAR_SIGNATURES.iter().any(|&s| s == sig) {
+        if TAR_SIGNATURES.contains(&sig) {
             return Some(make_result("application/x-tar"));
         }
     }

@@ -131,14 +131,7 @@ fn png_magic() {
 #[test]
 fn html_meta_charset() {
     let data = b"<html><head><meta charset=\"utf-8\"></head><body>hi</body></html>";
-    check(
-        "html",
-        data,
-        Some("utf-8"),
-        0.95,
-        Some("en"),
-        "text/html",
-    );
+    check("html", data, Some("utf-8"), 0.95, Some("en"), "text/html");
 }
 
 #[test]
