@@ -10,6 +10,8 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
+  # Upstream chardet commit this port is validated against (chardet 7.6.1.dev).
+  CHARDET_REF: e9603fad69cdc5d34d03616682650acd4891eb5d
 
 jobs:
   rust:
@@ -40,7 +42,7 @@ jobs:
         working-directory: chardet-py
         run: maturin build --release
       - name: Install wheel
-        run: pip install ../target/wheels/chardet-*.whl
+        run: pip install target/wheels/chardet-*.whl
       - name: Smoke test
         run: |
           python - <<'PY'
@@ -65,21 +67,29 @@ jobs:
           python-version: "3.12"
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - name: Reference chardet + build
+      - name: Check out reference chardet
         run: |
-          pip install "chardet>=7"
-          python -c "import chardet; print('reference chardet', chardet.__version__)"
-          cargo build
+          git init -q /tmp/ref-chardet
+          git -C /tmp/ref-chardet remote add origin https://github.com/chardet/chardet.git
+          git -C /tmp/ref-chardet fetch -q --depth 1 origin "$CHARDET_REF"
+          git -C /tmp/ref-chardet checkout -q FETCH_HEAD
+          echo '__version__ = "7.6.1.dev0"' > /tmp/ref-chardet/src/chardet/_version.py
+          python -c "import sys; sys.path.insert(0, '/tmp/ref-chardet/src'); import chardet; print('reference chardet', chardet.__version__)"
+      - name: Build
+        run: cargo build
       - name: Samples
         env:
+          CHARDET_SRC: /tmp/ref-chardet/src
           CHARDET_BIN: target/debug/chardetect
         run: python scripts_compare/parity.py
       - name: Edge cases
         env:
+          CHARDET_SRC: /tmp/ref-chardet/src
           CHARDET_BIN: target/debug/chardetect
         run: python scripts_compare/edge_parity.py
       - name: Fuzz (seeds)
         env:
+          CHARDET_SRC: /tmp/ref-chardet/src
           CHARDET_BIN: target/debug/chardetect
         run: |
           for seed in 1 777 12345 424242; do
@@ -98,13 +108,18 @@ jobs:
           python-version: "3.12"
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - name: Clone corpus
-        run: git clone --depth 1 https://github.com/chardet/test-data tests/data
-      - name: Reference chardet + build
+      - name: Check out reference chardet and corpus
         run: |
-          pip install "chardet>=7"
-          cargo build
+          git init -q /tmp/ref-chardet
+          git -C /tmp/ref-chardet remote add origin https://github.com/chardet/chardet.git
+          git -C /tmp/ref-chardet fetch -q --depth 1 origin "$CHARDET_REF"
+          git -C /tmp/ref-chardet checkout -q FETCH_HEAD
+          echo '__version__ = "7.6.1.dev0"' > /tmp/ref-chardet/src/chardet/_version.py
+          git clone --depth 1 https://github.com/chardet/test-data tests/data
+      - name: Build
+        run: cargo build
       - name: Full-corpus regression
         env:
+          CHARDET_SRC: /tmp/ref-chardet/src
           CHARDET_BIN: target/debug/chardetect
         run: python scripts_compare/full_corpus.py tests/data
