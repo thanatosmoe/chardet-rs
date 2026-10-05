@@ -1,6 +1,9 @@
 # chardet-rs
 
 [![CI](https://github.com/thanatosmoe/chardet-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/thanatosmoe/chardet-rs/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/chardet-rs.svg)](https://crates.io/crates/chardet-rs)
+[![docs.rs](https://docs.rs/chardet-rs/badge.svg)](https://docs.rs/chardet-rs)
+[![PyPI](https://img.shields.io/pypi/v/chardet-rs.svg)](https://pypi.org/project/chardet-rs/)
 [![License: 0BSD](https://img.shields.io/badge/License-0BSD-blue.svg)](LICENSE)
 
 A Rust rewrite of [chardet 7](https://github.com/chardet/chardet), the
@@ -221,6 +224,18 @@ $ python3 scripts_generate/gen_categories.py   > chardet/src/codecs/categories_d
 Full chardet 7 coverage, including Windows code pages, ISO-8859 family, Mac,
 KOI8, DOS, mainframe EBCDIC, CJK (CP932/CP949/GB18030/Big5/EUC-JP/EUC-KR/Johab
 and the ISO-2022/HZ escape encodings), and the Unicode family.
+
+## Benchmarks
+
+A Rust micro-benchmark and a corpus throughput comparison are included:
+
+```console
+$ cargo run --release --example bench
+$ CHARDET_SRC=/path/to/chardet/src python3 scripts_compare/bench.py tests/data
+```
+
+The `Benchmark` workflow (manual dispatch) runs both against the full corpus
+and writes the results to the GitHub step summary.
 
 ## Project History
 
