@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = ["chardet", "chardet-py"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "0BSD"
+repository = "https://github.com/thanatosmoe/chardet-rs"
+authors = ["Thanatos"]
+rust-version = "1.74"
+
+[profile.release]
+lto = true
+codegen-units = 1

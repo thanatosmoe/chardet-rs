@@ -1,0 +1,30 @@
+[build-system]
+requires = ["maturin>=1.5,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "chardet"
+description = "Universal character encoding detector (Rust port of chardet 7)"
+readme = "../README.md"
+requires-python = ">=3.9"
+license = "0BSD"
+dynamic = ["version"]
+authors = [{ name = "Thanatos" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Rust",
+  "Topic :: Text Processing :: Linguistic",
+]
+
+[project.urls]
+Homepage = "https://github.com/thanatosmoe/chardet-rs"
+Repository = "https://github.com/thanatosmoe/chardet-rs"
+
+[project.scripts]
+chardetect = "chardet.cli:main"
+
+[tool.maturin]
+module-name = "chardet._chardet"
+python-source = "python"
+manifest-path = "Cargo.toml"
+features = ["pyo3/extension-module"]

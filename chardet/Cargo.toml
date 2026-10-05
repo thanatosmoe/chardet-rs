@@ -1,0 +1,27 @@
+[package]
+name = "chardet"
+description = "Universal character encoding detector (Rust port of chardet 7)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "chardet"
+path = "src/lib.rs"
+
+[[bin]]
+name = "chardetect"
+path = "src/main.rs"
+
+[dependencies]
+flate2 = "1"
+sha2 = "0.10"
+encoding_rs = "0.8"
+once_cell = "1"
+regex = "1"
+
+[features]
+default = []
