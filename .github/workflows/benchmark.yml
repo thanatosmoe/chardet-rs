@@ -1,0 +1,46 @@
+name: Benchmark
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  CHARDET_REF: e9603fad69cdc5d34d03616682650acd4891eb5d
+
+jobs:
+  benchmark:
+    name: Throughput
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Check out reference chardet and corpus
+        run: |
+          git init -q /tmp/ref-chardet
+          git -C /tmp/ref-chardet remote add origin https://github.com/chardet/chardet.git
+          git -C /tmp/ref-chardet fetch -q --depth 1 origin "$CHARDET_REF"
+          git -C /tmp/ref-chardet checkout -q FETCH_HEAD
+          echo '__version__ = "7.6.1.dev0"' > /tmp/ref-chardet/src/chardet/_version.py
+          git clone --depth 1 https://github.com/chardet/test-data tests/data
+      - name: Build (release)
+        run: cargo build --release
+      - name: Rust micro-benchmark
+        run: cargo run --release --example bench | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Corpus benchmark vs chardet 7
+        env:
+          CHARDET_SRC: /tmp/ref-chardet/src
+          CHARDET_BIN: target/release/chardetect
+        run: |
+          {
+            echo '```'
+            python scripts_compare/bench.py tests/data
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"

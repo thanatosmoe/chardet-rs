@@ -30,3 +30,11 @@ regex = "1"
 
 [features]
 default = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[[example]]
+name = "bench"
+path = "examples/bench.rs"
