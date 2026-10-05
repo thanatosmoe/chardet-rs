@@ -147,7 +147,7 @@ def main() -> None:
         if shown >= 40:
             print(f"... and {len(mismatches)-shown} more")
             break
-    sys.exit(1 if exact != total else 0)
+    sys.exit(1 if exact_ok != total else 0)
 
 
 if __name__ == "__main__":
